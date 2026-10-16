@@ -4,22 +4,40 @@
              x:Class="Layouts2_ARVC.MainPage"
              BackgroundColor="#080707">
 
+    <VerticalStackLayout Padding="20"
+                         Spacing="15"
+                         VerticalOptions="Center">
 
-    <VerticalStackLayout Padding="20">
+        <!-- Pantalla del procedimiento -->
+        <Label x:Name="ExpressionLabel"
+               Text=""
+               FontSize="22"
+               HorizontalOptions="End"
+               HorizontalTextAlignment="End"
+               TextColor="#BDBDBD"
+               LineBreakMode="CharacterWrap"
+               Margin="0,0,5,0"/>
 
-        <!-- Pantalla de resultados -->
-        <Label x:Name="ResultLabel" Text="0" FontSize="48" HorizontalOptions="End" TextColor="White" Margin="0,0,0,30"/>
-     
+        <!-- Pantalla del resultado -->
+        <Label x:Name="ResultLabel"
+               Text="0"
+               FontSize="48"
+               HorizontalOptions="Fill"
+               HorizontalTextAlignment="End"
+               TextColor="White"
+               LineBreakMode="CharacterWrap"
+               Margin="0,0,0,25"/>
 
         <!-- Grid de botones -->
-        <Grid RowSpacing="10" ColumnSpacing="10">
+        <Grid RowSpacing="10"
+              ColumnSpacing="10">
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="65"/>
+                <RowDefinition Height="65"/>
+                <RowDefinition Height="65"/>
+                <RowDefinition Height="65"/>
+                <RowDefinition Height="65"/>
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
@@ -30,33 +48,144 @@
             </Grid.ColumnDefinitions>
 
             <!-- Fila 0 -->
-            <Button Text="C" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="0" Grid.Column="0" Clicked="OnClearClicked"/>
-            <Button Text="x" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="0" Grid.Column="1" Clicked="OnOperatorClicked"/>
-            <Button Text="÷" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="0" Grid.Column="2" Clicked="OnOperatorClicked"/>
-            <Button Text="⌫" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="0" Grid.Column="3" Clicked="OnOperatorClicked"/>
+            <Button Text="C"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="0" Grid.Column="0"
+                    Clicked="OnClearClicked"/>
+
+            <Button Text="x"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="0" Grid.Column="1"
+                    Clicked="OnOperatorClicked"/>
+
+            <Button Text="÷"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="0" Grid.Column="2"
+                    Clicked="OnOperatorClicked"/>
+
+            <Button Text="⌫"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="0" Grid.Column="3"
+                    Clicked="OnOperatorClicked"/>
 
             <!-- Fila 1 -->
-            <Button Text="7" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="1" Grid.Column="0" Clicked="OnNumberClicked"/>
-            <Button Text="8" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="1" Grid.Column="1" Clicked="OnNumberClicked"/>
-            <Button Text="9" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="1" Grid.Column="2" Clicked="OnNumberClicked"/>
-            <Button Text="-" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="1" Grid.Column="3" Clicked="OnOperatorClicked"/>
+            <Button Text="7"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="1" Grid.Column="0"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="8"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="1" Grid.Column="1"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="9"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="1" Grid.Column="2"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="-"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="1" Grid.Column="3"
+                    Clicked="OnOperatorClicked"/>
 
             <!-- Fila 2 -->
-            <Button Text="4" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="2" Grid.Column="0" Clicked="OnNumberClicked"/>
-            <Button Text="5" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="2" Grid.Column="1" Clicked="OnNumberClicked"/>
-            <Button Text="6" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="2" Grid.Column="2" Clicked="OnNumberClicked"/>
-            <Button Text="+" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="2" Grid.Column="3" Clicked="OnOperatorClicked"/>
+            <Button Text="4"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="2" Grid.Column="0"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="5"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="2" Grid.Column="1"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="6"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="2" Grid.Column="2"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="+"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="2" Grid.Column="3"
+                    Clicked="OnOperatorClicked"/>
 
             <!-- Fila 3 -->
-            <Button Text="1" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="3" Grid.Column="0" Clicked="OnNumberClicked"/>
-            <Button Text="2" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="3" Grid.Column="1" Clicked="OnNumberClicked"/>
-            <Button Text="3" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="3" Grid.Column="2" Clicked="OnNumberClicked"/>
-            <Button Text="%" BackgroundColor="#404040" TextColor="White" CornerRadius="40" Grid.Row="3" Grid.Column="3" Clicked="OnOperatorClicked"/>
+            <Button Text="1"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="3" Grid.Column="0"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="2"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="3" Grid.Column="1"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="3"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="3" Grid.Column="2"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="%"
+                    BackgroundColor="#404040"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="3" Grid.Column="3"
+                    Clicked="OnOperatorClicked"/>
 
             <!-- Fila 4 -->
-            <Button Text="0" BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Clicked="OnNumberClicked"/>
-            <Button Text="." BackgroundColor="Black" TextColor="White" CornerRadius="40" Grid.Row="4" Grid.Column="2" Clicked="OnNumberClicked"/>
-            <Button Text="=" BackgroundColor="Orange" TextColor="White" CornerRadius="40" Grid.Row="4" Grid.Column="3" Clicked="OnEqualsClicked"/>
+            <Button Text="0"
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="4" Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="."
+                    BackgroundColor="Black"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="4" Grid.Column="2"
+                    Clicked="OnNumberClicked"/>
+
+            <Button Text="="
+                    BackgroundColor="Orange"
+                    TextColor="White"
+                    CornerRadius="40"
+                    Grid.Row="4" Grid.Column="3"
+                    Clicked="OnEqualsClicked"/>
+
         </Grid>
     </VerticalStackLayout>
 </ContentPage>

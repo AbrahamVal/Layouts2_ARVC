@@ -6,139 +6,274 @@ namespace Layouts2_ARVC
 {
     public partial class MainPage : ContentPage
     {
-        double n1, n2, resultado;
-        string operacion = "";
-        bool nuevoNumero = false;
+        private double n1 = 0;
+        private double n2 = 0;
+        private double resultado = 0;
+
+        private string operacion = "";
+        private string numeroActual = "0";
+        private string expresion = "";
+
+        private bool nuevoNumero = true;
+        private bool hayOperacion = false;
+        private bool resultadoMostrado = false;
+
+        private readonly CultureInfo cultura =
+            CultureInfo.InvariantCulture;
 
         public MainPage()
         {
             InitializeComponent();
+            ActualizarPantalla();
         }
 
-        // Evento para los botones numéricos y el punto decimal
+        // Botones numéricos y punto decimal
         private void OnNumberClicked(object sender, EventArgs e)
         {
             Button boton = (Button)sender;
             string numero = boton.Text;
 
-            if (ResultLabel.Text == "0" || nuevoNumero)
-            {
-                ResultLabel.Text = "";
-                nuevoNumero = false;
-            }
-
-            // Evita escribir más de un punto decimal
             if (numero == ".")
             {
-                if (ResultLabel.Text.Contains("."))
+                if (!nuevoNumero && numeroActual.Contains("."))
                     return;
 
-                if (ResultLabel.Text == "")
-                    ResultLabel.Text = "0";
+                if (nuevoNumero)
+                {
+                    numeroActual = "0.";
+                    nuevoNumero = false;
+                }
+                else
+                {
+                    numeroActual += ".";
+                }
+            }
+            else
+            {
+                if (nuevoNumero)
+                {
+                    numeroActual = numero;
+                    nuevoNumero = false;
+                }
+                else
+                {
+                    if (numeroActual == "0")
+                        numeroActual = numero;
+                    else
+                        numeroActual += numero;
+                }
             }
 
-            ResultLabel.Text += numero;
+            resultadoMostrado = false;
+            ActualizarPantalla();
         }
 
-        // Evento para los operadores matemáticos
-        private void OnOperatorClicked(object sender, EventArgs e)
+        // Botones de operadores y borrar
+
+        private async void OnOperatorClicked(object sender, EventArgs e)
         {
             Button boton = (Button)sender;
             string operador = boton.Text;
 
-            // Botón para borrar el último carácter
-            if (operador == "⌫")
+            // Botón para borrar
+            if (operador == "⌫" || operador == "⌅")
             {
-                if (!nuevoNumero && ResultLabel.Text.Length > 0)
+                if (resultadoMostrado)
                 {
-                    ResultLabel.Text =
-                        ResultLabel.Text.Length == 1
-                        ? "0"
-                        : ResultLabel.Text.Substring(
-                            0, ResultLabel.Text.Length - 1);
+                    LimpiarCalculadora();
+                    return;
                 }
 
+                if (!nuevoNumero && numeroActual.Length > 1)
+                {
+                    numeroActual = numeroActual.Substring(
+                        0, numeroActual.Length - 1);
+                }
+                else
+                {
+                    numeroActual = "0";
+                    nuevoNumero = true;
+                }
+
+                ActualizarPantalla();
                 return;
             }
 
-            // Guarda el primer número y selecciona la operación
-            if (double.TryParse(
-                ResultLabel.Text,
+            if (!double.TryParse(
+                numeroActual,
                 NumberStyles.Float,
-                CultureInfo.InvariantCulture,
-                out n1))
+                cultura,
+                out double valorActual))
             {
-                operacion = operador;
-                nuevoNumero = true;
+                return;
             }
+
+            // Si acabamos de mostrar un resultado, continuar desde él
+            if (resultadoMostrado)
+            {
+                expresion = numeroActual + " ";
+                resultadoMostrado = false;
+                hayOperacion = false;
+                n1 = valorActual;
+            }
+
+            // Si ya hay una operación pendiente, resolverla
+            if (hayOperacion && !nuevoNumero)
+            {
+                n2 = valorActual;
+
+                if (!CalcularOperacion(out resultado))
+                {
+                    await DisplayAlert(
+                        "Error",
+                        "No se puede dividir entre cero.",
+                        "OK");
+                    return;
+                }
+
+                n1 = resultado;
+                numeroActual = resultado.ToString("G", cultura);
+
+                // Sustituir la expresión por la operación resuelta
+                expresion = numeroActual + " ";
+            }
+            else if (!hayOperacion)
+            {
+                n1 = valorActual;
+                expresion = numeroActual + " ";
+            }
+
+            // Seleccionar el operador nuevo sin duplicar el anterior
+            operacion = operador;
+            hayOperacion = true;
+            nuevoNumero = true;
+
+            expresion = expresion.TrimEnd() + " " + operador + " ";
+
+            ActualizarPantalla();
         }
 
-        // Evento del botón igual
+        // Botón igual
         private async void OnEqualsClicked(object sender, EventArgs e)
         {
-            if (operacion == "")
+            if (!hayOperacion || nuevoNumero)
                 return;
 
             if (!double.TryParse(
-                ResultLabel.Text,
+                numeroActual,
                 NumberStyles.Float,
-                CultureInfo.InvariantCulture,
+                cultura,
                 out n2))
+            {
                 return;
+            }
+
+            if (!CalcularOperacion(out resultado))
+            {
+                await DisplayAlert(
+                    "Error",
+                    "No se puede dividir entre cero.",
+                    "OK");
+
+                return;
+            }
+
+            expresion += FormatearNumero(n2) + " =";
+
+            numeroActual = resultado.ToString("G", cultura);
+
+            n1 = resultado;
+            operacion = "";
+            hayOperacion = false;
+            nuevoNumero = true;
+            resultadoMostrado = true;
+
+            ActualizarPantalla();
+        }
+
+        // Realizar la operación matemática
+        private bool CalcularOperacion(out double valor)
+        {
+            valor = 0;
 
             switch (operacion)
             {
                 case "+":
-                    resultado = n1 + n2;
+                    valor = n1 + n2;
                     break;
 
                 case "-":
-                    resultado = n1 - n2;
+                    valor = n1 - n2;
                     break;
 
                 case "x":
                 case "X":
-                    resultado = n1 * n2;
+                case "*":
+                case "×":
+                    valor = n1 * n2;
                     break;
 
                 case "÷":
+                case "/":
                     if (n2 == 0)
-                    {
-                        await DisplayAlert(
-                            "Error",
-                            "No se puede dividir entre cero",
-                            "OK");
-                        return;
-                    }
+                        return false;
 
-                    resultado = n1 / n2;
+                    valor = n1 / n2;
                     break;
 
                 case "%":
-                    resultado = n1 % n2;
+                    if (n2 == 0)
+                        return false;
+
+                    valor = n1 % n2;
                     break;
 
                 default:
-                    return;
+                    return false;
             }
 
-            ResultLabel.Text = resultado.ToString(
-                "G",
-                CultureInfo.InvariantCulture);
-
-            nuevoNumero = true;
-            operacion = "";
+            return !double.IsNaN(valor) &&
+                   !double.IsInfinity(valor);
         }
 
-        // Evento del botón C: limpia la calculadora
+        // Mostrar procedimiento y resultado
+        private void ActualizarPantalla()
+        {
+            ExpressionLabel.Text = expresion;
+
+            if (numeroActual == "")
+                numeroActual = "0";
+
+            ResultLabel.Text = numeroActual;
+        }
+
+        // Formatear números sin decimales innecesarios
+        private string FormatearNumero(double numero)
+        {
+            return numero.ToString("G", cultura);
+        }
+
+        // Botón C: limpiar todo
         private void OnClearClicked(object sender, EventArgs e)
         {
-            ResultLabel.Text = "0";
+            LimpiarCalculadora();
+        }
+
+        private void LimpiarCalculadora()
+        {
             n1 = 0;
             n2 = 0;
             resultado = 0;
+
             operacion = "";
-            nuevoNumero = false;
+            numeroActual = "0";
+            expresion = "";
+
+            nuevoNumero = true;
+            hayOperacion = false;
+            resultadoMostrado = false;
+
+            ActualizarPantalla();
         }
     }
 }
